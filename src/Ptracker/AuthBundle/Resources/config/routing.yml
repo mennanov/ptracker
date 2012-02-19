@@ -1,0 +1,3 @@
+PtrackerAuthBundle_homepage:
+    pattern:  /auth/{name}
+    defaults: { _controller: PtrackerAuthBundle:Default:index }
