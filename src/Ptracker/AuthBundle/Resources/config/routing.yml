@@ -1,3 +1,14 @@
 PtrackerAuthBundle_homepage:
-    pattern:  /auth/{name}
+    pattern:  /
     defaults: { _controller: PtrackerAuthBundle:Default:index }
+
+register:
+    pattern:  /register
+    defaults: { _controller: PtrackerAuthBundle:Default:register }
+    
+login:
+    pattern:  /login
+    defaults: { _controller: PtrackerAuthBundle:Default:login }
+
+login_check:
+    pattern:  /login_check

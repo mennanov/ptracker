@@ -1,0 +1,26 @@
+{% extends '::default.html.twig' %}
+{% block content %}
+<div class="span4 userform">
+    <h1>Sign in</h1>
+    <form action="{{ path('login_check') }}" method="post">
+        <label for="username">Username:</label>
+        <input type="text" required="required" id="username" name="_username" value="{{ last_username }}" />
+
+        <label for="password">Password:</label>
+        <input type="password" required="required" id="password" name="_password" />
+        <input type="hidden" name="_target_path" value="/tasks" />
+        {% if error %}
+        <div class="alert alert-block">
+            <a class="close" data-dismiss="alert">×</a>
+            <h4 class="alert-heading">Error!</h4>
+            {{ error.message }}
+        </div>
+        {% endif %}
+        <div class="form-actions">
+            <button class="btn btn-primary" name="login" type="submit">Sign in</button>
+            <span>Or <a href="{{ path('register') }}">register</a></span>
+        </div>
+    </form>
+
+</div>
+{% endblock %}
