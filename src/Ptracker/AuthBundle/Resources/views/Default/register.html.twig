@@ -2,6 +2,9 @@
 {% block content %}
 <div class="span4 userform">
     <h1>Sign up</h1>
+    {% if(app.request.query.get('success')) %}
+    <p>Confirmation email is sent to you.<br/> Please proceed registration by clicking the secret link in the email.</p>
+    {% else %}
     <form novalidate action="{{ path('register') }}" method="post">
         {{ form_widget(form) }}
         <div class="form-actions">
@@ -9,5 +12,6 @@
             <span>Or <a href="{{ path('login') }}">sign in</a></span>
         </div>
     </form>
+    {% endif %}
 </div>
 {% endblock %}

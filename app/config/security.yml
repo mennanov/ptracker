@@ -4,6 +4,10 @@ security:
             algorithm:   sha1
             iterations: 1
             encode_as_base64: false
+        Ptracker\AuthBundle\Entity\User:
+            algorithm:   sha1
+            iterations: 1
+            encode_as_base64: false
 
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER

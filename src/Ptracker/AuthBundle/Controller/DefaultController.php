@@ -12,7 +12,6 @@ use Ptracker\AuthBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-
 class DefaultController extends Controller {
 
     public function indexAction($name) {
@@ -57,9 +56,33 @@ class DefaultController extends Controller {
             $form->bindRequest($request);
 
             if ($form->isValid()) {
-                // 
-
-                
+                // с данными всё ок, добавляем пользователя
+                $data = $form->getData();
+                $user->setUsername($data->username);
+                $user->setName($data->name);
+                $user->setEmail($data->email);
+                // получаем хэшированный пароль
+                $factory = $this->get('security.encoder_factory');
+                $encoder = $factory->getEncoder($user);
+                $password = $encoder->encodePassword($data->password, $user->getSalt());
+                $user->setPassword($password);
+                // по умолчанию пользователь неактивен
+                $user->setIsActive(false);
+                // сохраняем
+                $em = $this->getDoctrine()->getEntityManager();
+                $em->persist($user);
+                $em->flush();
+                // если пользователь сохранился без проблем - отправляем письмо для подтверждения
+                if ($user->getId()) {
+                    $message = \Swift_Message::newInstance()
+                            ->setSubject('Account confirmation')
+                            ->setFrom('mennanov@gmail.com')
+                            ->setTo($data->email)
+                            ->setContentType('text/html')
+                            ->setBody($this->renderView('PtrackerAuthBundle:Default:register_email.html.twig', array('salt' => $user->getSalt(), 'username' => $data->username)));
+                    $this->get('mailer')->send($message);
+                    $this->redirect($this->generateUrl('register', array('success' => true)));
+                }
             }
         }
         $form = $form->createView();

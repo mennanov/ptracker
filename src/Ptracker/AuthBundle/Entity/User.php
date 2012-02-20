@@ -7,11 +7,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Ptracker\AuthBundle\Entity\User
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Ptracker\AuthBundle\Entity\UserRepository")
+ * @UniqueEntity( fields = {"username", "email"} )
  */
 class User implements AdvancedUserInterface
 {
@@ -28,7 +30,7 @@ class User implements AdvancedUserInterface
      * @ORM\Column(name="username", type="string", length=25, unique=true)
      * @Assert\Regex(
      *     pattern="/^\w+$/",
-     *     match=false,
+     *     match=true,
      *     message="Username must be a valid \w+ regexp username :)",
      *     groups={"registration"}     
      * )
@@ -95,6 +97,16 @@ class User implements AdvancedUserInterface
     {
     }
 
+    /**
+     * Set username
+     *
+     * @param string $username
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    }
+    
     public function getUsername()
     {
         return $this->username;
@@ -103,6 +115,16 @@ class User implements AdvancedUserInterface
     public function getSalt()
     {
         return $this->salt;
+    }
+    
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
+    
+    public function setIsActive($isActive)
+    {
+        $this->isActive = (boolean) $isActive;
     }
     
     /**
