@@ -32,3 +32,4 @@
 [2012-02-20 22:26:40] request.ERROR: Symfony\Component\HttpKernel\Exception\NotFoundHttpException: No route found for "GET /" (uncaught exception) at /home/renat/www/ptracker/app/cache/prod/classes.php line 4564 [] []
 [2012-02-20 22:26:45] request.ERROR: Symfony\Component\HttpKernel\Exception\NotFoundHttpException: No route found for "GET /" (uncaught exception) at /home/renat/www/ptracker/app/cache/prod/classes.php line 4564 [] []
 [2012-02-20 22:26:50] request.ERROR: Symfony\Component\HttpKernel\Exception\NotFoundHttpException: No route found for "GET /app_prod.php" (uncaught exception) at /home/renat/www/ptracker/app/cache/prod/classes.php line 4564 [] []
+[2012-02-21 20:48:06] request.ERROR: Symfony\Component\HttpKernel\Exception\NotFoundHttpException: No route found for "GET /activate/mennanov/pyy60rqpqkgwoc8soccwswc4skowgso" (uncaught exception) at /home/renat/www/ptracker/app/cache/prod/classes.php line 4564 [] []

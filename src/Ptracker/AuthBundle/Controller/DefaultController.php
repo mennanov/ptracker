@@ -89,4 +89,24 @@ class DefaultController extends Controller {
         return compact('form');
     }
 
+     /**
+     * 
+     * @Template()
+     */
+    public function activateAction($username, $salt) {
+        $em = $this->getDoctrine()->getEntityManager();
+        $user = $em->getRepository('PtrackerAuthBundle:User')->findOneBy(array(
+            'username' => $username,
+            'salt' => $salt,
+            'isActive' => false
+                ));
+
+        if ($user) {
+            $user->setIsActive(true);
+            $em->flush();
+            return $this->redirect($this->generateUrl('login', array('activated' => true)));
+        }
+        return;
+    }
+
 }

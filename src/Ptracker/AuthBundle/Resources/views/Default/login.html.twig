@@ -2,6 +2,11 @@
 {% block content %}
 <div class="span4 userform">
     <h1>Sign in</h1>
+    {% if(app.request.query.get('activated')) %}
+    <div class="alert alert-success">
+        Your account was just activated! <br /> Login using your username and password.
+    </div>
+    {% endif %}
     <form action="{{ path('login_check') }}" method="post">
         <label for="username">Username:</label>
         <input type="text" required="required" id="username" name="_username" value="{{ last_username }}" />

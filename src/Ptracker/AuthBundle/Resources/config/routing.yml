@@ -9,6 +9,10 @@ register:
 login:
     pattern:  /login
     defaults: { _controller: PtrackerAuthBundle:Default:login }
+    
+activate:
+    pattern:  /activate/{username}/{salt}
+    defaults: { _controller: PtrackerAuthBundle:Default:activate }
 
 login_check:
     pattern:  /login_check
