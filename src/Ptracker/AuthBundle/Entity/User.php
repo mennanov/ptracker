@@ -6,8 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 /**
  * Ptracker\AuthBundle\Entity\User
  *
@@ -15,8 +16,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity(repositoryClass="Ptracker\AuthBundle\Entity\UserRepository")
  * @UniqueEntity( fields = {"username", "email"} )
  */
-class User implements AdvancedUserInterface
-{
+class User implements AdvancedUserInterface {
+
     /**
      * @var integer $id
      *
@@ -26,7 +27,12 @@ class User implements AdvancedUserInterface
      */
     public $id;
 
-     /**
+    /**
+     * @ORM\OneToMany(targetEntity="Ptracker\TasksBundle\Entity\Task", mappedBy="user")
+     */
+    public $tasks;
+
+    /**
      * @ORM\Column(name="username", type="string", length=25, unique=true)
      * @Assert\Regex(
      *     pattern="/^\w+$/",
@@ -42,7 +48,7 @@ class User implements AdvancedUserInterface
      * @ORM\Column(name="salt", type="string", length=40)
      */
     public $salt;
-    
+
     /**
      * @var string $name
      *
@@ -71,30 +77,28 @@ class User implements AdvancedUserInterface
      * @Assert\NotBlank(groups={"registration", "authentication"})
      */
     public $password;
-    
+
     /**
      * @ORM\Column(name="is_active", type="boolean")
      */
     public $isActive;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->isActive = true;
         $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+        $this->tasks = new ArrayCollection();
     }
 
-    public function getRoles()
-    {
+    public function getRoles() {
         return array('ROLE_USER');
     }
 
-    public function equals(UserInterface $user)
-    {
+    public function equals(UserInterface $user) {
         return $user->getUsername() === $this->username;
     }
 
-    public function eraseCredentials()
-    {
+    public function eraseCredentials() {
+        
     }
 
     /**
@@ -102,38 +106,32 @@ class User implements AdvancedUserInterface
      *
      * @param string $username
      */
-    public function setUsername($username)
-    {
+    public function setUsername($username) {
         $this->username = $username;
     }
-    
-    public function getUsername()
-    {
+
+    public function getUsername() {
         return $this->username;
     }
 
-    public function getSalt()
-    {
+    public function getSalt() {
         return $this->salt;
     }
-    
-    public function getIsActive()
-    {
+
+    public function getIsActive() {
         return $this->isActive;
     }
-    
-    public function setIsActive($isActive)
-    {
+
+    public function setIsActive($isActive) {
         $this->isActive = (boolean) $isActive;
     }
-    
+
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -142,8 +140,7 @@ class User implements AdvancedUserInterface
      *
      * @param string $name
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->name = $name;
     }
 
@@ -152,8 +149,7 @@ class User implements AdvancedUserInterface
      *
      * @return string 
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
 
@@ -162,8 +158,7 @@ class User implements AdvancedUserInterface
      *
      * @param string $email
      */
-    public function setEmail($email)
-    {
+    public function setEmail($email) {
         $this->email = $email;
     }
 
@@ -172,8 +167,7 @@ class User implements AdvancedUserInterface
      *
      * @return string 
      */
-    public function getEmail()
-    {
+    public function getEmail() {
         return $this->email;
     }
 
@@ -182,8 +176,7 @@ class User implements AdvancedUserInterface
      *
      * @param string $password
      */
-    public function setPassword($password)
-    {
+    public function setPassword($password) {
         $this->password = $password;
     }
 
@@ -192,28 +185,51 @@ class User implements AdvancedUserInterface
      *
      * @return string 
      */
-    public function getPassword()
-    {
+    public function getPassword() {
         return $this->password;
     }
-    
-    public function isAccountNonExpired()
-    {
+
+    public function isAccountNonExpired() {
         return true;
     }
 
-    public function isAccountNonLocked()
-    {
+    public function isAccountNonLocked() {
         return true;
     }
 
-    public function isCredentialsNonExpired()
-    {
+    public function isCredentialsNonExpired() {
         return true;
     }
 
-    public function isEnabled()
-    {
+    public function isEnabled() {
         return $this->isActive;
     }
+
+    /**
+     * Set salt
+     *
+     * @param string $salt
+     */
+    public function setSalt($salt) {
+        $this->salt = $salt;
+    }
+
+    /**
+     * Add tasks
+     *
+     * @param Ptracker\AuthBundle\Entity\PtrackerTasksBundle:Task $tasks
+     */
+    public function addTask(\Ptracker\TasksBundle\Entity\Task $tasks) {
+        $this->tasks[] = $tasks;
+    }
+
+    /**
+     * Get tasks
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getTasks() {
+        return $this->tasks;
+    }
+
 }

@@ -14,10 +14,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class DefaultController extends Controller {
 
-    public function indexAction($name) {
-        return $this->render('PtrackerAuthBundle:Default:index.html.twig', array('name' => $name));
-    }
-
     /**
      * 
      * @Template()
@@ -106,7 +102,7 @@ class DefaultController extends Controller {
             $em->flush();
             return $this->redirect($this->generateUrl('login', array('activated' => true)));
         }
-        return;
+        return array();
     }
 
 }

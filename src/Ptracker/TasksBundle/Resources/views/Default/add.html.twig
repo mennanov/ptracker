@@ -1,0 +1,34 @@
+{% extends '::default.html.twig' %}
+{% block content %}
+    <h1>Add new task</h1>
+    <form novalidate class="well" action="{{ path('tasks_add') }}" method="post">
+        {% if errors %}
+        <ul class="errors">
+        {% for error in errors %}
+            <li>{{ error.message }}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+        <label for="title">Title</label>
+        <input required="required" id="title" name="title" type="text" placeholder="Title of the story" class="span4">
+        <label for="description">Description</label>
+        <textarea rows="3" name="description" id="description" placeholder="Description" class="input-xlarge span4"></textarea>
+        <label for="points">Points</label>
+        <select name="points" class="span1" id="points">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+        </select>
+        <label for="responsible">Responsible</label>
+        <select required="required" name="responsible" id="responsible">
+            {% for user in users %}
+            <option value="{{ user.id }}">{{ user.username }}</option>
+            {% endfor %}
+        </select>
+        <div class="form-actions">
+            <button class="btn btn-primary" type="submit">Create a task</button>
+            <button class="btn" type="reset">Reset</button>
+        </div>
+      </form>
+{% endblock %}

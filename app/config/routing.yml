@@ -1,3 +1,7 @@
+PtrackerTasksBundle:
+    resource: "@PtrackerTasksBundle/Resources/config/routing.yml"
+    prefix:   /
+
 PtrackerAuthBundle:
     resource: "@PtrackerAuthBundle/Resources/config/routing.yml"
     prefix:   /

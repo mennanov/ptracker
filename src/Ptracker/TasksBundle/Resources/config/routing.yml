@@ -1,0 +1,20 @@
+tasks:
+    pattern:  /tasks
+    defaults: { _controller: PtrackerTasksBundle:Default:index }
+    
+tasks_add:
+    pattern:  /tasks/add
+    defaults: { _controller: PtrackerTasksBundle:Default:add }  
+    
+tasks_view:
+    pattern:  /tasks/view/{id}
+    defaults: { _controller: PtrackerTasksBundle:Default:view, id : null }  
+    
+tasks_change_responsible:
+    pattern:  /tasks/change_responsible/{id}/{responsible}
+    defaults: { _controller: PtrackerTasksBundle:Default:change_responsible, _format: json }  
+    
+tasks_edit:
+    pattern:  /tasks/edit/{id}
+    defaults: { _controller: PtrackerTasksBundle:Default:edit } 
+

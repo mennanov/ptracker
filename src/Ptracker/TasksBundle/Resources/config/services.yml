@@ -1,0 +1,13 @@
+parameters:
+#    ptracker_tasks.example.class: Ptracker\TasksBundle\Example
+
+#services:
+#    ptracker_tasks.example:
+#        class: %ptracker_tasks.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+services:
+    ptracker.twig.extension:
+        class: Ptracker\TasksBundle\Twig\Extension\MyTwigExtension
+        tags:
+            -  { name: twig.extension }

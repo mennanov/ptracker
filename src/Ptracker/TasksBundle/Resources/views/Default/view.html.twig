@@ -1,0 +1,26 @@
+{% extends '::default.html.twig' %}
+{% block content %}
+<div class="page-header">
+    <h1>View task #{{ task.id }}</h1>
+</div>
+<div>
+    <h2>{{ task.title }}</h2>   
+    <p>{{ task.description|linkable|raw|nl2br }}</p>
+    <div class="well form-horizontal">
+        <div class="control-group">
+            <label class="control-label">Owner:</label><span class="help-inline"> <input type="text" disabled value="{{ owner.username }}" /></span>
+        </div>
+        <div class="control-group">
+        <label class="control-label" for="responsible">Responsible:</label>
+            <select id="responsible" data-task="{{ task.id }}">
+                {% for user in users %}
+                <option value="{{ path('tasks_change_responsible', { id : task.id , responsible : user.id }) }}" {% if(user.id == owner.id) %}selected{% endif %}>{{ user.username }}</option>
+                {% endfor %}
+            </select>
+        <span class="label label-success" style="display:none;">Responsible user was changed</span>
+        <span class="help-inline">You can change responsible user</span>
+        </div>
+        <a class="btn btn-inverse" href="{{ path('tasks_edit', {id : task.id}) }}">Edit this task</a>
+    </div>
+</div>
+{% endblock %}
