@@ -1,4 +1,4 @@
-PtrackerAuthBundle_homepage:
+homepage:
     pattern:  /
     defaults: { _controller: PtrackerAuthBundle:Default:index }
 

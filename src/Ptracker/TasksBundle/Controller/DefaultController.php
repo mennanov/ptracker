@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 // models
 use Ptracker\AuthBundle\Entity\User;
 use Ptracker\TasksBundle\Entity\Task;
+use Ptracker\TasksBundle\Entity\Comment;
 
 class DefaultController extends Controller {
 
@@ -86,6 +87,7 @@ class DefaultController extends Controller {
                 ->getRepository('PtrackerTasksBundle:Task')
                 ->find($id);
         if ($task) {
+            $user = $this->get('security.context')->getToken()->getUser();
             // get owner user
             $owner = $task->getUser();
             // get responsible user
@@ -98,7 +100,30 @@ class DefaultController extends Controller {
             $statuses = $this->statuses;
             // calculate next status
             $nextstatus = $task->getStatus() < count($statuses) - 1 ? $task->getStatus() + 1 : $this->started_status;
-            return compact('task', 'owner', 'responsible', 'users', 'statuses', 'nextstatus');
+            if ($this->getRequest()->getMethod() == 'POST') {
+                $new_comment = new Comment();
+                $new_comment->setText($this->getRequest()->request->get('comment'));
+                $new_comment->setTaskId($task->getId());
+                $new_comment->setUser($user);
+                $new_comment->setCreatedAt(new \DateTime);
+                $validator = $this->get('validator');
+                $errors = $validator->validate($new_comment);
+                if (count($errors) == 0) {
+                    $em = $this->getDoctrine()->getEntityManager();
+                    $em->persist($new_comment);
+                    $em->flush(); 
+                    return $this->redirect($this->generateUrl('tasks_view', array('id' => $task->getId())));
+                }
+            }
+            $comments = $this->getDoctrine()->getRepository('PtrackerTasksBundle:Comment')->findBy(array(
+                'task_id' => $task->getId()
+            ), array('id' => 'DESC'));
+            if(!empty($comments)) {
+                foreach($comments as &$comment) {
+                    $comment->author = $this->getDoctrine()->getRepository('PtrackerAuthBundle:User')->find($comment->getUserId());
+                }
+            }
+            return compact('task', 'owner', 'responsible', 'users', 'statuses', 'nextstatus', 'comments');
         } else {
             return $this->redirect($this->generateUrl('tasks'));
         }

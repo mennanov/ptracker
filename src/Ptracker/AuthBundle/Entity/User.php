@@ -31,6 +31,11 @@ class User implements AdvancedUserInterface {
      * @ORM\OneToMany(targetEntity="Ptracker\TasksBundle\Entity\Task", mappedBy="user")
      */
     public $tasks;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Ptracker\TasksBundle\Entity\Comment", mappedBy="user")
+     */
+    public $comments;
 
     /**
      * @ORM\Column(name="username", type="string", length=25, unique=true)
@@ -232,4 +237,24 @@ class User implements AdvancedUserInterface {
         return $this->tasks;
     }
 
+
+    /**
+     * Add comments
+     *
+     * @param Ptracker\TasksBundle\Entity\Comment $comments
+     */
+    public function addComment(\Ptracker\TasksBundle\Entity\Comment $comments)
+    {
+        $this->comments[] = $comments;
+    }
+
+    /**
+     * Get comments
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
 }

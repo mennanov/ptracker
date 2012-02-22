@@ -18,6 +18,15 @@ class DefaultController extends Controller {
      * 
      * @Template()
      */
+    public function indexAction() {
+        return array();
+    }
+    
+    
+    /**
+     * 
+     * @Template()
+     */
     public function loginAction() {
         $request = $this->getRequest();
         $session = $request->getSession();
