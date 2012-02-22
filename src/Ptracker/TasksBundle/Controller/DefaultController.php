@@ -14,6 +14,9 @@ use Ptracker\TasksBundle\Entity\Task;
 
 class DefaultController extends Controller {
 
+    public $statuses = array('new', 'started', 'finished', 'accepted', 'rejected');
+    public $started_status = 1;
+    
     /**
      * @Template
      */
@@ -73,14 +76,17 @@ class DefaultController extends Controller {
             global $router;
             $router = $this->get('router');
             $users = $this->getDoctrine()
-                ->getRepository('PtrackerAuthBundle:User')
-                ->findByIsActive(true);
-            return compact('task', 'owner', 'responsible', 'users');
+                    ->getRepository('PtrackerAuthBundle:User')
+                    ->findByIsActive(true);
+            $statuses = $this->statuses;
+            // calculate next status
+            $nextstatus = $task->getStatus() < count($statuses) - 1 ? $task->getStatus() + 1 : $this->started_status;
+            return compact('task', 'owner', 'responsible', 'users', 'statuses', 'nextstatus');
         } else {
             return $this->redirect($this->generateUrl('tasks'));
-        } 
+        }
     }
-    
+
     public function change_responsibleAction($id, $responsible) {
         $em = $this->getDoctrine()->getEntityManager();
         $result = 'failed';
@@ -88,8 +94,23 @@ class DefaultController extends Controller {
         if ($task) {
             // check responsible user
             $user = $em->getRepository('PtrackerAuthBundle:User')->find($responsible);
-            if($user) {
+            if ($user) {
                 $task->setResponsibleUser($user);
+                $em->flush();
+                $result = 'success';
+            }
+        }
+        return new Response(json_encode($result));
+    }
+
+    public function change_statusAction($id, $status) {
+        $em = $this->getDoctrine()->getEntityManager();
+        $result = 'failed';
+        $task = $em->getRepository('PtrackerTasksBundle:Task')->find($id);
+        if ($task) {
+            // check next status
+            if (!empty($this->statuses[$status]) && $status - $task->getStatus() == 1 || in_array($status, array($this->started_status, 3, 4))) {
+                $task->setStatus($status);
                 $em->flush();
                 $result = 'success';
             }

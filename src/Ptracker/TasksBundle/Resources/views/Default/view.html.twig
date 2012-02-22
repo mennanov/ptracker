@@ -8,17 +8,24 @@
     <p>{{ task.description|linkable|raw|nl2br }}</p>
     <div class="well form-horizontal">
         <div class="control-group">
-            <label class="control-label">Owner:</label><span class="help-inline"> <input type="text" disabled value="{{ owner.username }}" /></span>
+            <label class="control-label">Owner:</label><input type="text" disabled value="{{ owner.username }}" />
         </div>
         <div class="control-group">
         <label class="control-label" for="responsible">Responsible:</label>
-            <select id="responsible" data-task="{{ task.id }}">
+            <select id="responsible">
                 {% for user in users %}
                 <option value="{{ path('tasks_change_responsible', { id : task.id , responsible : user.id }) }}" {% if(user.id == owner.id) %}selected{% endif %}>{{ user.username }}</option>
                 {% endfor %}
             </select>
         <span class="label label-success" style="display:none;">Responsible user was changed</span>
         <span class="help-inline">You can change responsible user</span>
+        </div>
+        <div class="control-group">
+        <label class="control-label" for="responsible">Status:</label>
+            <input type="text" disabled id="status" value="{{ statuses[task.status] }}" />
+        <span class="help-inline">Change status to: <a class="btn status" href="#" data-href="{{ path('tasks_change_status', {id : task.id, status : nextstatus}) }}">{{ statuses[nextstatus] }}</a>
+        {% if(nextstatus == 3) %}<a class="btn status" href="#" data-href="{{ path('tasks_change_status', {id : task.id, status : nextstatus + 1}) }}">{{ statuses[nextstatus + 1] }}</a>{% endif %}
+        </span>
         </div>
         <a class="btn btn-inverse" href="{{ path('tasks_edit', {id : task.id}) }}">Edit this task</a>
     </div>

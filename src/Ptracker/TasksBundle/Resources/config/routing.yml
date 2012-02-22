@@ -14,6 +14,10 @@ tasks_change_responsible:
     pattern:  /tasks/change_responsible/{id}/{responsible}
     defaults: { _controller: PtrackerTasksBundle:Default:change_responsible, _format: json }  
     
+tasks_change_status:
+    pattern:  /tasks/change_status/{id}/{status}
+    defaults: { _controller: PtrackerTasksBundle:Default:change_status, _format: json }    
+    
 tasks_edit:
     pattern:  /tasks/edit/{id}
     defaults: { _controller: PtrackerTasksBundle:Default:edit } 

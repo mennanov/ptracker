@@ -58,6 +58,13 @@ class Task {
      * @Assert\NotBlank()
      */
     private $points;
+    
+    /**
+     * @var smallint $status
+     *
+     * @ORM\Column(name="status", type="smallint")
+     */
+    private $status;
 
     /**
      * @var datetime $created_at
@@ -182,6 +189,24 @@ class Task {
      */
     public function getPoints() {
         return $this->points;
+    }
+    
+    /**
+     * Get status
+     *
+     * @return smallint 
+     */
+    public function getStatus() {
+        return $this->status;
+    }
+    
+    /**
+     * Set status
+     *
+     * @param smallint $points
+     */
+    public function setStatus($status) {
+        $this->status = $status;
     }
 
     /**
