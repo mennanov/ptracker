@@ -117,5 +117,45 @@ class DefaultController extends Controller {
         }
         return new Response(json_encode($result));
     }
+    
+    /**
+     * @Template
+     */
+    public function editAction($id) {
+        $request = $this->getRequest();
+        $user_repository = $this->getDoctrine()->getRepository('PtrackerAuthBundle:User');
+        $user = $this->get('security.context')->getToken()->getUser();
+        $errors = array();
+        // users for <select>
+        $users = $user_repository->findByIsActive(true);
+        $task = $this->getDoctrine()->getRepository('PtrackerTasksBundle:Task')->find($id);
+        if(!$task) {
+            return $this->redirect($this->generateUrl('tasks'));
+        }
+        $responsible = $task->getResponsibleUser();
+        if ($request->getMethod() == 'POST' && !empty($task)) {
+            $task->setTitle($request->request->get('title'));
+            $task->setDescription(htmlspecialchars($request->request->get('description'), ENT_QUOTES, 'UTF-8'));
+            $task->setPoints($request->request->get('points'));
+            $task->setUser($user);
+            $task->setCreatedAt(new \DateTime);
+            // check if responsible user exists
+            $responsible_user = $user_repository->find($request->request->get('responsible'));
+            if ($responsible_user) {
+                $task->setResponsibleUser($responsible_user);
+                $validator = $this->get('validator');
+                $errors = $validator->validate($task);
+                if (count($errors) > 0) {
+                    return compact('errors', 'users');
+                } else {
+                    $em = $this->getDoctrine()->getEntityManager();
+                    $em->persist($task);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('tasks_view', array('id' => $task->getId())));
+                }
+            }
+        }
+        return compact('users', 'errors', 'task', 'responsible');
+    }
 
 }

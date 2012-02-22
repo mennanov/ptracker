@@ -1,7 +1,7 @@
 {% extends '::default.html.twig' %}
 {% block content %}
     <h1>Add new task</h1>
-    <form novalidate class="well" action="{{ path('tasks_add') }}" method="post">
+    <form class="well" action="{{ path('tasks_add') }}" method="post">
         {% if errors %}
         <ul class="errors">
         {% for error in errors %}

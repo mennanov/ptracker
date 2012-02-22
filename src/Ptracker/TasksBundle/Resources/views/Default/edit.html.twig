@@ -1,0 +1,34 @@
+{% extends '::default.html.twig' %}
+{% block content %}
+    <h1>Edit task # {{ task.id }}</h1>
+    <form class="well" action="{{ path('tasks_edit', {id : task.id}) }}" method="post">
+        {% if errors %}
+        <ul class="errors">
+        {% for error in errors %}
+            <li>{{ error.message }}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+        <label for="title">Title</label>
+        <input required="required" id="title" value="{{ task.title }}" name="title" type="text" placeholder="Title of the story" class="span4">
+        <label for="description">Description</label>
+        <textarea rows="3" name="description" id="description" placeholder="Description" class="input-xlarge span4">{{ task.description|raw }}</textarea>
+        <label for="points">Points</label>
+        <select name="points" class="span1" id="points">
+                <option value="0" {% if(task.points == 0) %}selected{% endif %}>0</option>
+                <option value="1" {% if(task.points == 1) %}selected{% endif %}>1</option>
+                <option value="2" {% if(task.points == 2) %}selected{% endif %}>2</option>
+                <option value="3" {% if(task.points == 3) %}selected{% endif %}>3</option>
+        </select>
+        <label for="responsible">Responsible</label>
+        <select required="required" name="responsible" id="responsible">
+            {% for user in users %}
+            <option value="{{ user.id }}" {% if(responsible.id == user.id) %}selected{% endif %}>{{ user.username }}</option>
+            {% endfor %}
+        </select>
+        <div class="form-actions">
+            <button class="btn btn-primary" type="submit">Save task</button>
+            <button class="btn" type="reset">Reset</button>
+        </div>
+      </form>
+{% endblock %}
