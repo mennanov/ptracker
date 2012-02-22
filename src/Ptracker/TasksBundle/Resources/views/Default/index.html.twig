@@ -1,1 +1,30 @@
 {% extends '::default.html.twig' %}
+{% block content %}
+<div class="page-header">
+    <h1>Tasks list</h1>
+</div>
+<form class="well form-inline" method="get" action="{{ path('tasks') }}">
+    <label>Responsible</label>
+    <select name="responsible">
+        <option></option>
+        {% for user in users %}
+        <option value="{{ user.id }}" {% if(app.request.query.get('responsible') == user.id) %}selected{% endif %}>{{ user.username }}</option>
+        {% endfor %}
+    </select>
+    <label>Status</label>
+    <select name="status">
+        <option></option>
+        {% for i, status in statuses %}
+        <option value="{{ i }}" {% if(app.request.query.get('status') == i and app.request.query.get('status') != "") %}selected{% endif %}>{{ status }}</option>
+        {% endfor %}
+    </select>
+    <button class="btn" type="submit">Filter</button>
+</form>
+<div class="well">
+    <h3>Tasks found:</h3>
+{% for task in tasks %}
+<p><b>#{{ task.id }}</b> <a href="{{ path('tasks_view', {id : task.id}) }}">{{ task.title }}</a>, status: <b>{{ statuses[task.status] }}</b>, points: {{ task.points }}, owner: <b>{{ task.owner.username }}</b>, responsible: <b>{{ task.responsible.username }}</b></p>
+<hr/>
+{% endfor %}
+</div>
+{% endblock %}

@@ -20,9 +20,26 @@ class DefaultController extends Controller {
     /**
      * @Template
      */
-    public function indexAction() {
-
-        return array();
+    public function indexAction(Request $request) {
+        $repo = $this->getDoctrine()->getRepository('PtrackerTasksBundle:Task');
+        $user_repo = $this->getDoctrine()->getRepository('PtrackerAuthBundle:User');
+        $conditions = array();
+        if($request->query->get('responsible')) {
+            $conditions['responsible_user_id'] = $request->query->get('responsible');
+        }
+        if(strlen($request->query->get('status')) > 0) {
+            $conditions['status'] = $request->query->get('status');
+        }
+        $tasks = $repo->findBy($conditions);
+        if(!empty($tasks)) {
+            foreach($tasks as &$task) {
+                $task->owner = $user_repo->find($task->getUserId());
+                $task->responsible = $user_repo->find($task->getResponsibleUserId());
+            }
+        }
+        $users = $this->getDoctrine()->getRepository('PtrackerAuthBundle:User')->findByIsActive(true);
+        $statuses = $this->statuses;
+        return compact('tasks', 'users', 'statuses');
     }
 
     /**
