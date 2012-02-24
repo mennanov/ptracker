@@ -14,7 +14,7 @@
             <label class="control-label" for="responsible">Responsible:</label>
             <select id="responsible">
                 {% for user in users %}
-                <option value="{{ path('tasks_change_responsible', { id : task.id , responsible : user.id }) }}" {% if(user.id == owner.id) %}selected{% endif %}>{{ user.username }}</option>
+                <option value="{{ path('tasks_change_responsible', { id : task.id , responsible : user.id }) }}" {% if(user.id == responsible.id) %}selected{% endif %}>{{ user.username }}</option>
                 {% endfor %}
             </select>
             <span class="label label-success" style="display:none;">Responsible user was changed</span>
