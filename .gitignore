@@ -1,2 +1,4 @@
 nbproject
 app/cache
+app/logs
+*.ini
