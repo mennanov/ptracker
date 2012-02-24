@@ -86,7 +86,7 @@ class DefaultController extends Controller {
                             ->setContentType('text/html')
                             ->setBody($this->renderView('PtrackerAuthBundle:Default:register_email.html.twig', array('salt' => $user->getSalt(), 'username' => $data->username)));
                     $this->get('mailer')->send($message);
-                    $this->redirect($this->generateUrl('register', array('success' => true)));
+                    return $this->redirect($this->generateUrl('register', array('success' => true)));
                 }
             }
         }

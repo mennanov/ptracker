@@ -3,12 +3,12 @@
 <div class="span4 userform">
     <h1>Sign up</h1>
     {% if(app.request.query.get('success')) %}
-    <p>Confirmation email is sent to you.<br/> Please proceed registration by clicking the secret link in the email.</p>
+    <p id="success">Confirmation email is sent to you.<br/> Please proceed registration by clicking the secret link in the email.</p>
     {% else %}
-    <form novalidate action="{{ path('register') }}" method="post">
+    <form action="{{ path('register') }}" method="post">
         {{ form_widget(form) }}
         <div class="form-actions">
-            <button class="btn btn-primary" name="login" type="submit">Sign up</button>
+            <button class="btn btn-primary" name="submit" type="submit">Sign up</button>
             <span>Or <a href="{{ path('login') }}">sign in</a></span>
         </div>
     </form>
