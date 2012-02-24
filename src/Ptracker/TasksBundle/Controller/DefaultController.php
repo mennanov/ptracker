@@ -57,6 +57,7 @@ class DefaultController extends Controller {
             $task->setTitle($request->request->get('title'));
             $task->setDescription(htmlspecialchars($request->request->get('description'), ENT_QUOTES, 'UTF-8'));
             $task->setPoints($request->request->get('points'));
+            $task->setStatus(0);
             $task->setUser($user);
             $task->setCreatedAt(new \DateTime);
 

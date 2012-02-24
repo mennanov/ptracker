@@ -16,7 +16,7 @@ security:
     providers:
 #        in_memory:
 #            users:
-#                user:  { password: userpass, roles: [ 'ROLE_USER' ] }
+#                testuser:  { password: testing1234, roles: [ 'ROLE_USER' ] }
 #                admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
         main:
             entity: { class: Ptracker\AuthBundle\Entity\User, property: username }
