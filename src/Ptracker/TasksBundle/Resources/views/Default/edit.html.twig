@@ -1,4 +1,4 @@
-{% extends '::default.html.twig' %}
+{% extends '::tasks.html.twig' %}
 {% block content %}
     <h1>Edit task # {{ task.id }}</h1>
     <form class="well" action="{{ path('tasks_edit', {id : task.id}) }}" method="post">

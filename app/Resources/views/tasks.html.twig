@@ -1,0 +1,9 @@
+{% extends '::default.html.twig' %}
+{% block menu %}                    
+<div class="nav-collapse">
+    <ul class="nav">
+        <li><a href="{{ path('tasks') }}">Tasks list</a></li>
+        <li><a href="{{ path('tasks_add') }}">Create new task</a></li>
+    </ul>
+</div><!--/.nav-collapse -->
+{% endblock %}
